@@ -11,10 +11,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Root.io Remediation
-        uses: rootio-avr/rootio-remediation-action@latest
-        with:
-          org_id: ${{ env.ROOTIO_ORG_ID }}
-          api_token: ${{ secrets.ROOTIO_API_TOKEN }}
-          registry_credentials_id: ${{ env.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
+      - name: Create output directory
+        run: mkdir -p remediation-output
+
+      - name: Run Root.io Remediation (Direct)
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/remediation-output:/output \
+            public.ecr.aws/rootio/remediation-client:latest \
+            ${{ vars.ROOTIO_ORG_ID }} \
+            ${{ secrets.ROOTIO_API_TOKEN }} \
+            ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }} \
+            zoheb3454/keycloak:26.3.3-debian-12-r0 \
+            amd64 \
+            /output
