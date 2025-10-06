@@ -1,13 +1,11 @@
-name: Root.io Remediation Only
+name: Root.io Remediation
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  remediate:
+  remediate-keycloak-image:
     runs-on: ubuntu-latest
     environment: Root
     steps:
@@ -20,4 +18,4 @@ jobs:
           org_id: ${{ vars.ROOTIO_ORG_ID }}
           api_token: ${{ secrets.ROOTIO_API_TOKEN }}
           registry_credentials_id: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
+          IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
