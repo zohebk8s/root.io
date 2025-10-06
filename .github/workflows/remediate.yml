@@ -7,7 +7,6 @@ on:
 jobs:
   remediate:
     runs-on: ubuntu-latest
-    environment: Root
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
