@@ -13,19 +13,18 @@ jobs:
     env:
       ROOTIO_ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
       ROOTIO_REGISTRY_CREDENTIALS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-      IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Pull Keycloak image
-        run: docker pull ${{ env.IMAGE_REPO_TAG }}
+        run: docker pull zoheb3454/keycloak:26.3.3-debian-12-r0
 
       - name: Scan image with Trivy (table format)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.IMAGE_REPO_TAG }}
+          image-ref: zoheb3454/keycloak:26.3.3-debian-12-r0
           format: table
           severity: CRITICAL,HIGH,MEDIUM,LOW
           exit-code: 0
@@ -33,7 +32,7 @@ jobs:
 
       - name: Generate Trivy JSON report
         run: |
-          trivy image --format json --output trivy-report.json ${{ env.IMAGE_REPO_TAG }}
+          trivy image --format json --output trivy-report.json zoheb3454/keycloak:26.3.3-debian-12-r0
 
       - name: Upload Trivy report
         uses: actions/upload-artifact@v4
@@ -47,4 +46,4 @@ jobs:
           org_id: ${{ env.ROOTIO_ORG_ID }}
           api_token: ${{ secrets.ROOTIO_API_TOKEN }}
           registry_credentials_id: ${{ env.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-          image_reference: ${{ env.IMAGE_REPO_TAG }}
+          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
