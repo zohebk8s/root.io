@@ -1,0 +1,35 @@
+name: Root.io CI Pipeline
+
+on:
+  workflow_dispatch:
+
+env:
+  ROOTIO_ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
+  ROOTIO_REGISTRY_CREDENTIALS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
+
+jobs:
+  scan-and-remediate:
+    runs-on: ubuntu-latest
+    environment: Root
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Pull Keycloak image
+        run: docker pull zoheb3454/keycloak:26.3.3-debian-12-r0
+
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: zoheb3454/keycloak:26.3.3-debian-12-r0
+          format: table
+          exit-code: 0
+          ignore-unfixed: true
+
+      - name: Run Root.io Remediation
+        uses: rootio-avr/rootio-remediation-action@latest
+        with:
+          org_id: ${{ env.ROOTIO_ORG_ID }}
+          api_token: ${{ secrets.ROOTIO_API_TOKEN }}
+          registry_credentials_id: ${{ env.ROOTIO_REGISTRY_CREDENTIALS_ID }}
+          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
