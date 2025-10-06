@@ -6,15 +6,15 @@ on:
   pull_request:
     branches: [ main ]
 
-env:
-  ROOTIO_ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
-  ROOTIO_REGISTRY_CREDENTIALS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-  IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
-
 jobs:
   scan-and-remediate:
     runs-on: ubuntu-latest
     environment: Root
+    env:
+      ROOTIO_ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
+      ROOTIO_REGISTRY_CREDENTIALS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
+      IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
