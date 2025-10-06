@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run Root.io Remediation
-        uses: zoheb3454/rootio-remediation-action@main
+        uses: zohebk8s/rootio-remediation-action@main
         with:
           ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
           ROOT_API_TOKEN: ${{ secrets.ROOTIO_API_TOKEN }}
