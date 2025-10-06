@@ -15,7 +15,7 @@ jobs:
       - name: Run Root.io Remediation
         uses: rootio-avr/rootio-remediation-action@latest
         with:
-          ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
-          ROOT_API_TOKEN: ${{ secrets.ROOTIO_API_TOKEN }}
-          CREDS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-          IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
+          org_id: ${{ env.ROOTIO_ORG_ID }}
+          api_token: ${{ secrets.ROOTIO_API_TOKEN }}
+          registry_credentials_id: ${{ env.ROOTIO_REGISTRY_CREDENTIALS_ID }}
+          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
