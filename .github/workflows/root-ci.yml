@@ -1,11 +1,15 @@
 name: Root.io CI Pipeline
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 env:
   ROOTIO_ORG_ID: ${{ vars.ROOTIO_ORG_ID }}
   ROOTIO_REGISTRY_CREDENTIALS_ID: ${{ vars.ROOTIO_REGISTRY_CREDENTIALS_ID }}
+  IMAGE_REPO_TAG: zoheb3454/keycloak:26.3.3-debian-12-r0
 
 jobs:
   scan-and-remediate:
@@ -16,15 +20,26 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Pull Keycloak image
-        run: docker pull zoheb3454/keycloak:26.3.3-debian-12-r0
+        run: docker pull ${{ env.IMAGE_REPO_TAG }}
 
-      - name: Scan image with Trivy
+      - name: Scan image with Trivy (table format)
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: zoheb3454/keycloak:26.3.3-debian-12-r0
+          image-ref: ${{ env.IMAGE_REPO_TAG }}
           format: table
+          severity: CRITICAL,HIGH,MEDIUM,LOW
           exit-code: 0
-          ignore-unfixed: true
+          ignore-unfixed: false
+
+      - name: Generate Trivy JSON report
+        run: |
+          trivy image --format json --output trivy-report.json ${{ env.IMAGE_REPO_TAG }}
+
+      - name: Upload Trivy report
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-json-report
+          path: trivy-report.json
 
       - name: Run Root.io Remediation
         uses: rootio-avr/rootio-remediation-action@latest
@@ -32,4 +47,4 @@ jobs:
           org_id: ${{ env.ROOTIO_ORG_ID }}
           api_token: ${{ secrets.ROOTIO_API_TOKEN }}
           registry_credentials_id: ${{ env.ROOTIO_REGISTRY_CREDENTIALS_ID }}
-          image_reference: zoheb3454/keycloak:26.3.3-debian-12-r0
+          image_reference: ${{ env.IMAGE_REPO_TAG }}
