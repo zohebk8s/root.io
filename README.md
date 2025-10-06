@@ -1,2 +1,2 @@
-# Root's Agentic AI delivers container security that fixes itself. 
-# Root's Agentic AI delivers container security that fixes itself. No rebasing, no vendor lock-in. It's time to shift left shift out.
+Automated. Invisible. Reliable.
+Root's Agentic Vulnerability Remediation (AVR) automates vulnerability remediation for your containers without code changes, pipeline friction, or risk.
